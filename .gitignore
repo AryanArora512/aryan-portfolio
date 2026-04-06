@@ -7,3 +7,13 @@ coverage
 *.log
 *.tsbuildinfo
 .DS_Store
+.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.vscode
+.idea
+*.sublime-project
+*.sublime-workspace
+*.swp
