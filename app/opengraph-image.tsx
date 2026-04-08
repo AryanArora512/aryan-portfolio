@@ -78,10 +78,17 @@ export default function OpenGraphImage() {
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 18, maxWidth: 900 }}>
-            <div style={{ fontSize: 70, lineHeight: 1.02, fontWeight: 700 }}>
-              Scalable Mobile Apps
-              <br />
-              Real-Time Systems
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                fontSize: 70,
+                lineHeight: 1.02,
+                fontWeight: 700,
+              }}
+            >
+              <span>Scalable Mobile Apps</span>
+              <span>Real-Time Systems</span>
             </div>
             <div style={{ fontSize: 28, lineHeight: 1.4, color: "#cbd5e1" }}>
               Flutter specialist building premium mobile apps, dashboards, APIs, and full-stack products for startups and businesses.
