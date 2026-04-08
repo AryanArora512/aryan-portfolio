@@ -277,7 +277,7 @@ function Navbar() {
             href="#contact"
             className="rounded-full border border-white/10 bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:scale-[1.02]"
           >
-            Start a Project
+            Contact Me
           </a>
         </div>
       </div>
@@ -312,16 +312,16 @@ function Hero() {
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <a
-                href="#contact"
+                href="#projects"
                 className="rounded-full bg-white px-6 py-4 text-center text-sm font-semibold text-slate-950 shadow-soft transition hover:-translate-y-0.5"
               >
-                Hire Me
+                View Live Demo
               </a>
               <a
                 href="#contact"
                 className="rounded-full border border-white/10 bg-white/5 px-6 py-4 text-center text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10"
               >
-                Start a Project
+                Contact Me
               </a>
             </div>
 
@@ -964,17 +964,25 @@ function FloatingWhatsApp() {
 function MobileStickyCTA() {
   return (
     <div className="fixed inset-x-0 bottom-4 z-40 px-4 sm:hidden">
-      <div className="glass-panel mx-auto flex max-w-md items-center justify-between gap-3 rounded-full px-4 py-3 shadow-glass">
-        <div>
-          <p className="text-xs text-slate-400">Available for Freelance</p>
-          <p className="text-sm font-semibold text-white">Start your project today</p>
-        </div>
-        <a
-          href="#contact"
-          className="rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-slate-950"
-        >
-          Start Project
-        </a>
+        <div className="glass-panel mx-auto flex max-w-md items-center justify-between gap-3 rounded-full px-4 py-3 shadow-glass">
+          <div>
+            <p className="text-xs text-slate-400">Available for Freelance</p>
+            <p className="text-sm font-semibold text-white">View my work or reach out</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <a
+              href="#projects"
+              className="rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white"
+            >
+              Demo
+            </a>
+            <a
+              href="#contact"
+              className="rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-slate-950"
+            >
+              Contact
+            </a>
+          </div>
       </div>
     </div>
   );
