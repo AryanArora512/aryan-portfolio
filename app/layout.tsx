@@ -50,6 +50,10 @@ export const metadata: Metadata = {
     description:
       "Flutter specialist building scalable apps, real-time systems, and full-stack products for startups and businesses.",
   },
+  icons: {
+    icon: "/icon",
+    apple: "/apple-icon",
+  },
 };
 
 export default function RootLayout({

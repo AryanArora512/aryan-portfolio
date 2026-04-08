@@ -8,6 +8,7 @@ type Skill = {
   title: string;
   description: string;
   icon: ReactNode;
+  iconClass: string;
 };
 
 type Experience = {
@@ -29,6 +30,11 @@ type Project = {
 };
 
 type Benefit = {
+  title: string;
+  description: string;
+};
+
+type Engagement = {
   title: string;
   description: string;
 };
@@ -57,6 +63,9 @@ type FormErrors = Partial<Record<keyof FormValues | "file", string>>;
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const siteUrl = "https://aryan-arora-dev.vercel.app";
+const bookingUrl =
+  process.env.NEXT_PUBLIC_BOOKING_URL ||
+  "mailto:aroraaryan512@gmail.com?subject=Book%20a%2015-minute%20discovery%20call";
 
 const initialFormValues: FormValues = {
   fullName: "",
@@ -73,31 +82,37 @@ const skills: Skill[] = [
     title: "Flutter & Dart",
     description: "Production-grade apps with polished UX, clean architecture, and long-term maintainability.",
     icon: <LayersIcon />,
+    iconClass: "from-cyanGlow/25 via-cyanGlow/10 to-transparent text-cyan-100 border-cyanGlow/20",
   },
   {
     title: "Next.js & React",
     description: "Modern SaaS-style frontends, dashboards, landing pages, and full-stack web experiences.",
     icon: <CodeWindowIcon />,
+    iconClass: "from-white/20 via-white/10 to-transparent text-white border-white/15",
   },
   {
     title: "FastAPI & Flask",
     description: "Reliable APIs, scalable services, business logic, and performance-focused backend systems.",
     icon: <ServerIcon />,
+    iconClass: "from-emeraldGlow/25 via-emeraldGlow/10 to-transparent text-emerald-100 border-emeraldGlow/20",
   },
   {
     title: "Firebase & Supabase",
     description: "Realtime sync, auth, push workflows, and backend services that move products faster.",
     icon: <DatabaseIcon />,
+    iconClass: "from-amber-300/25 via-amber-300/10 to-transparent text-amber-100 border-amber-200/20",
   },
   {
     title: "WebSockets & WebRTC",
     description: "Low-latency messaging, live tracking, communication features, and real-time user experiences.",
     icon: <PulseIcon />,
+    iconClass: "from-violet-400/25 via-violet-400/10 to-transparent text-violet-100 border-violet-300/20",
   },
   {
     title: "AI/ML Integrations",
     description: "Practical AI-powered workflows, smart features, and useful automation inside real products.",
     icon: <SparkIcon />,
+    iconClass: "from-fuchsia-400/25 via-fuchsia-400/10 to-transparent text-fuchsia-100 border-fuchsia-300/20",
   },
 ];
 
@@ -117,6 +132,25 @@ const benefits: Benefit[] = [
   {
     title: "Business-first thinking",
     description: "I frame projects around user outcomes, product clarity, and shipping something valuable.",
+  },
+];
+
+const engagements: Engagement[] = [
+  {
+    title: "MVP builds",
+    description: "For founders who need a serious first version that looks credible and works reliably.",
+  },
+  {
+    title: "App redesigns",
+    description: "For products that need better UX, stronger performance, and cleaner technical structure.",
+  },
+  {
+    title: "Realtime systems",
+    description: "For chat, tracking, live updates, notifications, and other low-latency product flows.",
+  },
+  {
+    title: "Dashboards & internal tools",
+    description: "For business systems that need speed, clarity, and dependable day-to-day usability.",
   },
 ];
 
@@ -383,6 +417,7 @@ export function PortfolioPage() {
         <Hero />
         <About />
         <WhyMe />
+        <EngagementSection />
         <Skills />
         <Experience />
         <Projects />
@@ -470,6 +505,12 @@ function Hero() {
                 className="rounded-full bg-white px-6 py-4 text-center text-sm font-semibold text-slate-950 shadow-soft transition hover:-translate-y-0.5"
               >
                 Start Your Project
+              </a>
+              <a
+                href={bookingUrl}
+                className="rounded-full border border-cyanGlow/20 bg-cyanGlow/10 px-6 py-4 text-center text-sm font-semibold text-cyan-100 transition hover:border-cyanGlow/40 hover:bg-cyanGlow/15"
+              >
+                Book a 15-min Call
               </a>
               <a
                 href="#projects"
@@ -633,6 +674,38 @@ function WhyMe() {
   );
 }
 
+function EngagementSection() {
+  return (
+    <section className="py-16 sm:py-24">
+      <div className="section-shell">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-medium uppercase tracking-[0.28em] text-cyan-200">How I Can Help</p>
+          <h2 className="section-heading">The kinds of projects I am most valuable on.</h2>
+          <p className="section-copy">
+            This gives potential clients faster clarity on where the fit is strongest and what type of work I handle best.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {engagements.map((engagement, index) => (
+            <motion.div
+              key={engagement.title}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.5, delay: index * 0.06 }}
+              className="glass-panel rounded-[28px] p-6 shadow-glass"
+            >
+              <p className="font-display text-xl font-semibold text-white">{engagement.title}</p>
+              <p className="mt-4 text-sm leading-7 text-slate-300">{engagement.description}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Skills() {
   return (
     <section id="skills" className="py-16 sm:py-24">
@@ -656,7 +729,9 @@ function Skills() {
               whileHover={{ y: -6 }}
               className="glass-panel rounded-[28px] p-6 shadow-glass transition"
             >
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-cyan-200">
+              <div
+                className={`flex h-14 w-14 items-center justify-center rounded-2xl border bg-gradient-to-br ${skill.iconClass}`}
+              >
                 {skill.icon}
               </div>
               <h3 className="font-display mt-5 text-xl font-semibold text-white">{skill.title}</h3>
@@ -790,6 +865,8 @@ function Projects() {
               </div>
 
               <p className="mt-5 text-sm leading-7 text-slate-200">{project.summary}</p>
+
+              <ProjectPreview title={project.title} tags={project.tags} featured={project.featured} />
 
               <div className="mt-6 space-y-4 rounded-[24px] border border-white/10 bg-black/20 p-5">
                 <ProjectPoint label="Problem" value={project.problem} />
@@ -1206,6 +1283,12 @@ function Contact() {
                     {isSubmitting ? "Submitting..." : "Start Your Project"}
                   </button>
                   <a
+                    href={bookingUrl}
+                    className="rounded-full border border-cyanGlow/20 bg-cyanGlow/10 px-6 py-4 text-center text-sm font-semibold text-cyan-100 transition hover:border-cyanGlow/40 hover:bg-cyanGlow/15"
+                  >
+                    Book a 15-min Call
+                  </a>
+                  <a
                     href="mailto:aroraaryan512@gmail.com"
                     className="rounded-full border border-white/10 bg-white/5 px-6 py-4 text-center text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10"
                   >
@@ -1245,12 +1328,20 @@ function MobileStickyCTA() {
           <p className="text-xs text-slate-400">Available for Freelance</p>
           <p className="text-sm font-semibold text-white">Start your project today</p>
         </div>
-        <a
-          href="#contact"
-          className="rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-slate-950"
-        >
-          Start Project
-        </a>
+        <div className="flex items-center gap-2">
+          <a
+            href={bookingUrl}
+            className="rounded-full border border-white/10 bg-white/5 px-3 py-2.5 text-sm font-semibold text-white"
+          >
+            Call
+          </a>
+          <a
+            href="#contact"
+            className="rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-slate-950"
+          >
+            Start
+          </a>
+        </div>
       </div>
     </div>
   );
@@ -1270,6 +1361,90 @@ function MetricCard({
       <div className={`mb-4 h-1.5 w-24 rounded-full bg-gradient-to-r ${accent}`} />
       <p className="text-xs uppercase tracking-[0.24em] text-slate-400">{label}</p>
       <p className="mt-3 text-sm leading-7 text-slate-100">{value}</p>
+    </div>
+  );
+}
+
+function ProjectPreview({
+  title,
+  tags,
+  featured,
+}: {
+  title: string;
+  tags: string[];
+  featured?: boolean;
+}) {
+  return (
+    <div
+      className={`mt-6 overflow-hidden rounded-[26px] border border-white/10 ${
+        featured ? "bg-gradient-to-br from-cyanGlow/15 via-white/5 to-accent/15" : "bg-white/[0.04]"
+      }`}
+    >
+      <div className="grid min-h-[220px] gap-4 p-5 sm:grid-cols-[1.15fr_0.85fr]">
+        <div className="rounded-[22px] border border-white/10 bg-slateNight/70 p-4">
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex gap-2">
+              <span className="h-2.5 w-2.5 rounded-full bg-rose-400/80" />
+              <span className="h-2.5 w-2.5 rounded-full bg-amber-300/80" />
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
+            </div>
+            <span className="text-xs uppercase tracking-[0.24em] text-slate-500">Preview</span>
+          </div>
+          <div className="grid gap-3">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
+              <div className="mb-3 flex items-center justify-between">
+                <p className="text-sm font-medium text-white">{title}</p>
+                <div className="rounded-full bg-emeraldGlow/15 px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-emerald-200">
+                  Live flow
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <div className="h-2 rounded-full bg-white/10" />
+                <div className="h-2 w-4/5 rounded-full bg-white/10" />
+                <div className="h-16 rounded-2xl bg-gradient-to-r from-cyanGlow/20 via-white/5 to-accent/20" />
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <div className="h-16 rounded-2xl bg-white/[0.05]" />
+              <div className="h-16 rounded-2xl bg-white/[0.05]" />
+              <div className="h-16 rounded-2xl bg-white/[0.05]" />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          <div className="rounded-[22px] border border-white/10 bg-black/20 p-4">
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Used In Build</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {tags.slice(0, 4).map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="rounded-[22px] border border-white/10 bg-black/20 p-4">
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Product Feel</p>
+            <div className="mt-4 space-y-3">
+              <div className="flex items-center justify-between rounded-2xl bg-white/[0.04] px-3 py-2.5">
+                <span className="text-sm text-slate-300">Performance</span>
+                <span className="text-sm font-medium text-white">High</span>
+              </div>
+              <div className="flex items-center justify-between rounded-2xl bg-white/[0.04] px-3 py-2.5">
+                <span className="text-sm text-slate-300">Architecture</span>
+                <span className="text-sm font-medium text-white">Scalable</span>
+              </div>
+              <div className="flex items-center justify-between rounded-2xl bg-white/[0.04] px-3 py-2.5">
+                <span className="text-sm text-slate-300">User Experience</span>
+                <span className="text-sm font-medium text-white">Premium</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
