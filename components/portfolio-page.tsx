@@ -21,9 +21,26 @@ type Experience = {
 type Project = {
   title: string;
   summary: string;
-  impact: string;
+  problem: string;
+  solution: string;
+  outcome: string;
   tags: string[];
   featured?: boolean;
+};
+
+type Benefit = {
+  title: string;
+  description: string;
+};
+
+type ProcessStep = {
+  title: string;
+  description: string;
+};
+
+type FaqItem = {
+  question: string;
+  answer: string;
 };
 
 type FormValues = {
@@ -39,6 +56,7 @@ type FormValues = {
 type FormErrors = Partial<Record<keyof FormValues | "file", string>>;
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const siteUrl = "https://aryan-arora-dev.vercel.app";
 
 const initialFormValues: FormValues = {
   fullName: "",
@@ -53,33 +71,90 @@ const initialFormValues: FormValues = {
 const skills: Skill[] = [
   {
     title: "Flutter & Dart",
-    description: "Production-grade mobile apps with clean architecture, polished UX, and maintainable code.",
+    description: "Production-grade apps with polished UX, clean architecture, and long-term maintainability.",
     icon: <LayersIcon />,
   },
   {
     title: "Next.js & React",
-    description: "Modern SaaS-style interfaces, dashboards, and fast web experiences built for business.",
+    description: "Modern SaaS-style frontends, dashboards, landing pages, and full-stack web experiences.",
     icon: <CodeWindowIcon />,
   },
   {
     title: "FastAPI & Flask",
-    description: "High-performance backend systems, integrations, and scalable API design.",
+    description: "Reliable APIs, scalable services, business logic, and performance-focused backend systems.",
     icon: <ServerIcon />,
   },
   {
     title: "Firebase & Supabase",
-    description: "Reliable auth, databases, and realtime features for fast-moving product teams.",
+    description: "Realtime sync, auth, push workflows, and backend services that move products faster.",
     icon: <DatabaseIcon />,
   },
   {
     title: "WebSockets & WebRTC",
-    description: "Low-latency communication, live sync, chat, and real-time product infrastructure.",
+    description: "Low-latency messaging, live tracking, communication features, and real-time user experiences.",
     icon: <PulseIcon />,
   },
   {
     title: "AI/ML Integrations",
-    description: "Practical AI-powered features, automation pipelines, and smart product enhancements.",
+    description: "Practical AI-powered workflows, smart features, and useful automation inside real products.",
     icon: <SparkIcon />,
+  },
+];
+
+const benefits: Benefit[] = [
+  {
+    title: "Fast, focused delivery",
+    description: "I keep scope clear, move quickly, and avoid wasting time on overengineering.",
+  },
+  {
+    title: "Clean scalable code",
+    description: "The goal is not just launch speed. It is maintainability when your product grows.",
+  },
+  {
+    title: "Strong real-time expertise",
+    description: "If your product needs chat, tracking, notifications, or live sync, this is a real strength.",
+  },
+  {
+    title: "Business-first thinking",
+    description: "I frame projects around user outcomes, product clarity, and shipping something valuable.",
+  },
+];
+
+const processSteps: ProcessStep[] = [
+  {
+    title: "1. Scope & priorities",
+    description: "We define the product goals, key screens, technical constraints, and delivery priorities.",
+  },
+  {
+    title: "2. Build & iterate",
+    description: "I ship in focused milestones so you can review progress instead of waiting blindly.",
+  },
+  {
+    title: "3. Launch & support",
+    description: "You get a polished deliverable, cleaner handoff, and support around launch stability.",
+  },
+];
+
+const faqItems: FaqItem[] = [
+  {
+    question: "What kind of freelance projects do you take on?",
+    answer:
+      "I work best on Flutter mobile apps, full-stack product builds, admin dashboards, real-time systems, and feature-heavy MVPs that need clean architecture and fast execution.",
+  },
+  {
+    question: "Can you handle both frontend and backend?",
+    answer:
+      "Yes. I can handle Flutter apps, Next.js frontends, Python backend APIs, real-time integrations, and supporting product systems as part of one engagement.",
+  },
+  {
+    question: "Do you work with startups and Indian-budget projects?",
+    answer:
+      "Yes. I work with startups, SaaS teams, and service businesses. Budget matters, so the form helps qualify timeline and scope early to keep discussions practical.",
+  },
+  {
+    question: "How quickly do you respond?",
+    answer:
+      "Serious project inquiries usually get a response within 24 hours, often faster if the scope is already clear.",
   },
 ];
 
@@ -122,71 +197,141 @@ const projects: Project[] = [
   {
     title: "UncleLau",
     summary:
-      "Multi-role service platform for customers, technicians, and partners with business-grade operational flows.",
-    impact:
-      "Delivered real-time booking, live tracking, chat, analytics, and dashboards in a scalable architecture designed for actual business usage.",
+      "A featured multi-role service platform built for customers, technicians, and partners in one scalable system.",
+    problem:
+      "The product needed coordinated bookings, live status visibility, communication, and operational control across multiple user types.",
+    solution:
+      "Built a real-time platform with booking flows, live tracking, chat, dashboards, and analytics using scalable mobile and backend architecture.",
+    outcome:
+      "Positioned the product like a serious business platform instead of a basic app, with stronger operational visibility and user flow continuity.",
     tags: ["Flutter", "FastAPI", "Realtime", "Dashboards", "Booking"],
     featured: true,
   },
   {
     title: "Sulaimania",
     summary:
-      "Feature-rich Islamic application with prayer times, Quran access, Qibla compass, and localization.",
-    impact:
-      "Implemented offline support, audio playback, and location-aware features while keeping the app smooth and reliable.",
+      "A feature-rich Islamic app with prayer times, Quran access, compass tools, and localized user flows.",
+    problem:
+      "The app needed to support everyday usage reliably, even with audio, location-based features, and offline access involved.",
+    solution:
+      "Implemented offline-friendly flows, audio playback, localization, and location-aware experiences with a clean and responsive mobile UX.",
+    outcome:
+      "Created a smoother, more dependable product experience for repeat usage instead of a one-time utility app feel.",
     tags: ["Flutter", "Offline", "Audio", "Localization", "Maps"],
   },
   {
     title: "Spark Love",
     summary:
-      "Real-time interaction app built around fast feedback, fluid navigation, and engaging interfaces.",
-    impact:
-      "Focused on responsive UI behavior and performance optimization to keep the experience fast under active usage.",
+      "A real-time interaction app designed around responsive UI, engagement, and quick user feedback.",
+    problem:
+      "The product needed to feel smooth and immediate, where lag or awkward UX would reduce engagement quickly.",
+    solution:
+      "Focused on responsive interface patterns, performance tuning, and fluid interaction behavior across the core flows.",
+    outcome:
+      "Improved perceived app quality by keeping the experience fast, modern, and interaction-driven.",
     tags: ["Flutter", "Realtime", "UI/UX", "Performance"],
   },
   {
     title: "Rapidus Share",
     summary:
-      "Cross-device file sharing system built for low latency and smooth communication between devices.",
-    impact:
-      "Engineered real-time transfer logic and networking flows for high-speed exchange with minimal friction.",
+      "A cross-device sharing system designed for fast transfer and low-friction file movement.",
+    problem:
+      "The app needed low latency and smooth communication between devices to feel reliable in real usage.",
+    solution:
+      "Engineered real-time transfer logic and networking flows that supported faster exchange and better communication stability.",
+    outcome:
+      "Made the sharing experience feel more immediate and dependable, which is the main selling point of this kind of product.",
     tags: ["Realtime", "Cross-device", "Networking", "Low latency"],
   },
   {
     title: "CashCry",
     summary:
-      "Scalable utility product with a clean app architecture and performance-focused implementation.",
-    impact:
-      "Structured for maintainability and consistent speed, making future iteration easier and safer.",
+      "A scalable utility product built with cleaner architecture and a stronger focus on app reliability.",
+    problem:
+      "The app required an implementation that could stay maintainable over time without performance drifting as features expanded.",
+    solution:
+      "Structured the project around cleaner components, maintainable patterns, and performance-conscious implementation.",
+    outcome:
+      "Made future iteration safer and gave the product a stronger technical foundation for scale.",
     tags: ["Flutter", "Architecture", "Optimization"],
   },
   {
     title: "Real-Time Chat System",
     summary:
-      "Messaging platform with media sharing, push notifications, and reliable sync behavior.",
-    impact:
-      "Combined Firebase and WebSocket patterns to create low-latency communication with production-ready responsiveness.",
+      "A messaging experience with media sharing, push notifications, and responsive sync behavior.",
+    problem:
+      "The app needed low-latency communication while still handling media, notifications, and consistency across users.",
+    solution:
+      "Used Firebase and WebSocket-based patterns to implement messaging, media workflows, and timely updates.",
+    outcome:
+      "Delivered a stronger communication layer that felt faster and more usable in active conversations.",
     tags: ["Firebase", "WebSockets", "Push", "Media"],
   },
 ];
 
 const stats = [
-  { value: "6+", label: "High-impact client projects showcased" },
-  { value: "4+", label: "Years across mobile and full-stack development" },
-  { value: "24h", label: "Response promise for qualified project inquiries" },
+  { value: "Bluetis", label: "Currently building full-stack products professionally" },
+  { value: "6+", label: "Selected projects across mobile, realtime, and product systems" },
+  { value: "24h", label: "Response time for serious project inquiries" },
 ];
 
 const navItems = [
   { label: "About", href: "#about" },
+  { label: "Why Me", href: "#why-me" },
   { label: "Skills", href: "#skills" },
-  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
+  { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" },
 ];
 
 const projectTypes = ["Mobile App", "Web App", "Full Stack", "AI/ML", "Other"];
 const budgetOptions = ["₹10k–₹25k", "₹25k–₹50k", "₹50k–₹1L", "₹1L+"];
 const timelineOptions = ["Urgent (1–2 weeks)", "1 Month", "2–3 Months"];
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Aryan Arora",
+    url: siteUrl,
+    jobTitle: "Full Stack Mobile App Developer",
+    email: "mailto:aroraaryan512@gmail.com",
+    telephone: "+91 9928496590",
+    sameAs: ["https://www.linkedin.com/in/aryan-arora-4615b21ab/"],
+    knowsAbout: [
+      "Flutter development",
+      "Next.js development",
+      "FastAPI",
+      "Realtime systems",
+      "WebSockets",
+      "Firebase",
+      "AI integrations",
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: "Aryan Arora Freelance Development",
+    url: siteUrl,
+    areaServed: "Worldwide",
+    priceRange: "₹₹",
+    description:
+      "Freelance full stack mobile app development focused on Flutter apps, real-time systems, dashboards, APIs, and scalable product builds.",
+    founder: "Aryan Arora",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  },
+];
 
 export function PortfolioPage() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -198,6 +343,12 @@ export function PortfolioPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
       <AnimatePresence>
         {!isLoaded ? (
           <motion.div
@@ -231,9 +382,12 @@ export function PortfolioPage() {
         <Navbar />
         <Hero />
         <About />
+        <WhyMe />
         <Skills />
         <Experience />
         <Projects />
+        <Process />
+        <FaqSection />
         <Contact />
         <FloatingWhatsApp />
         <MobileStickyCTA />
@@ -277,7 +431,7 @@ function Navbar() {
             href="#contact"
             className="rounded-full border border-white/10 bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:scale-[1.02]"
           >
-            Contact Me
+            Start a Project
           </a>
         </div>
       </div>
@@ -299,30 +453,37 @@ function Hero() {
           >
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-slate-300">
               <span className="h-2 w-2 rounded-full bg-emeraldGlow shadow-[0_0_18px_rgba(52,211,153,0.8)]" />
-              Available for premium freelance builds
+              Currently at Bluetis Technology
             </div>
 
-            <h1 className="font-display max-w-4xl text-5xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl">
-              Building Scalable Mobile & Full Stack Apps
+            <h1 className="font-display max-w-5xl text-5xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl">
+              I Build Scalable Mobile Apps & Real-Time Systems That Users Love
             </h1>
 
-            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-              I build scalable mobile apps and real-time systems that perform. For founders and businesses, that means faster launches, polished user experience, and codebases that stay reliable as your product grows.
+            <p className="mt-6 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
+              Helping startups and businesses launch fast, reliable, and scalable mobile applications using Flutter and full-stack technologies. If you need a polished app that feels premium and performs under real usage, this is exactly what I do.
             </p>
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <a
-                href="#projects"
+                href="#contact"
                 className="rounded-full bg-white px-6 py-4 text-center text-sm font-semibold text-slate-950 shadow-soft transition hover:-translate-y-0.5"
               >
-                View Live Demo
+                Start Your Project
               </a>
               <a
-                href="#contact"
+                href="#projects"
                 className="rounded-full border border-white/10 bg-white/5 px-6 py-4 text-center text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10"
               >
-                Contact Me
+                View Projects
               </a>
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-3 text-sm text-slate-300">
+              <TrustChip label="Freelance Available" />
+              <TrustChip label="Flutter Specialist" />
+              <TrustChip label="Full-Stack Delivery" />
+              <TrustChip label="₹₹ Budget Friendly for Serious Projects" />
             </div>
 
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
@@ -366,18 +527,18 @@ function Hero() {
 
                 <div className="mt-8 space-y-4">
                   <MetricCard
-                    label="Core Offer"
-                    value="Flutter apps, full-stack systems, real-time product architecture"
+                    label="Best Fit"
+                    value="Startups, SaaS teams, service businesses, and product founders who need speed with quality."
                     accent="from-cyanGlow/40 to-cyanGlow/5"
                   />
                   <MetricCard
-                    label="Ideal Clients"
-                    value="Startups, SaaS teams, service businesses, and product-focused founders"
+                    label="Core Offer"
+                    value="Flutter apps, full-stack platforms, APIs, dashboards, chat systems, and real-time product flows."
                     accent="from-accent/40 to-accent/5"
                   />
                   <MetricCard
-                    label="What You Get"
-                    value="Premium UI, scalable backend thinking, faster execution, and cleaner delivery"
+                    label="Why Clients Reach Out"
+                    value="Clear communication, strong execution, cleaner code structure, and product-minded problem solving."
                     accent="from-emeraldGlow/40 to-emeraldGlow/5"
                   />
                 </div>
@@ -388,17 +549,13 @@ function Hero() {
                     value="aroraaryan512@gmail.com"
                     href="mailto:aroraaryan512@gmail.com"
                   />
-                  <ContactPill
-                    label="Phone"
-                    value="+91 9928496590"
-                    href="tel:+919928496590"
-                  />
+                  <ContactPill label="WhatsApp" value="+91 9928496590" href="https://wa.me/919928496590" />
                   <ContactPill
                     label="LinkedIn"
-                    value="Connect professionally"
+                    value="Professional profile"
                     href="https://www.linkedin.com/in/aryan-arora-4615b21ab/"
                   />
-                  <ContactPill label="Lead Time" value="Quick reply for serious inquiries" href="#contact" />
+                  <ContactPill label="Response Time" value="Usually within 24 hours" href="#contact" />
                 </div>
               </div>
             </div>
@@ -418,23 +575,59 @@ function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-120px" }}
           transition={{ duration: 0.65 }}
-          className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]"
+          className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr]"
         >
           <div>
             <p className="mb-4 text-sm font-medium uppercase tracking-[0.28em] text-cyan-200">
               About
             </p>
-            <h2 className="section-heading">More than a developer. A product-minded execution partner.</h2>
+            <h2 className="section-heading">A developer who thinks in product outcomes, not just features.</h2>
           </div>
           <div className="space-y-5">
             <p className="section-copy max-w-none">
-              I work at the intersection of mobile apps, backend systems, and real-time infrastructure. My strongest edge is building products that look premium on the surface and stay stable underneath as usage grows.
+              I work across mobile apps, backend systems, and real-time product infrastructure. That means I can help take a product from idea to working experience without the usual gap between design ambition and technical execution.
             </p>
             <p className="section-copy max-w-none">
-              Whether you need a customer-facing app, an internal dashboard, live communication features, or a full-stack product MVP, I help turn requirements into something launchable, scalable, and business-ready.
+              Whether you need a customer-facing app, internal dashboard, live communication system, or a full-stack MVP, I focus on shipping software that feels trustworthy to users and manageable for the business behind it.
             </p>
           </div>
         </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function WhyMe() {
+  return (
+    <section id="why-me" className="py-16 sm:py-24">
+      <div className="section-shell">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-medium uppercase tracking-[0.28em] text-cyan-200">Why Work With Me</p>
+          <h2 className="section-heading">The reasons clients choose me over a generic freelancer.</h2>
+          <p className="section-copy">
+            You are not just hiring someone to code screens. You are hiring someone to help make the product clearer, faster, and more dependable.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {benefits.map((benefit, index) => (
+            <motion.div
+              key={benefit.title}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.5, delay: index * 0.06 }}
+              whileHover={{ y: -6 }}
+              className="glass-panel rounded-[28px] p-6 shadow-glass"
+            >
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-cyan-200">
+                <CheckShieldIcon />
+              </div>
+              <h3 className="font-display text-xl font-semibold text-white">{benefit.title}</h3>
+              <p className="mt-3 text-sm leading-7 text-slate-300">{benefit.description}</p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -448,7 +641,7 @@ function Skills() {
           <p className="text-sm font-medium uppercase tracking-[0.28em] text-cyan-200">Skills</p>
           <h2 className="section-heading">Technical depth across mobile, frontend, backend, and realtime.</h2>
           <p className="section-copy">
-            The stack is flexible, but the outcome stays consistent: clean architecture, strong product UX, and engineering decisions made for long-term reliability.
+            The stack is flexible, but the outcome stays consistent: clean architecture, strong UX, and systems that can handle real usage without falling apart.
           </p>
         </div>
 
@@ -482,7 +675,7 @@ function Experience() {
       <div className="section-shell">
         <div className="flex flex-col gap-4">
           <p className="text-sm font-medium uppercase tracking-[0.28em] text-cyan-200">Experience</p>
-          <h2 className="section-heading">Hands-on delivery across mobile products, APIs, and business systems.</h2>
+          <h2 className="section-heading">Professional experience that adds trust, not just history.</h2>
         </div>
 
         <div className="relative mt-12 space-y-6 before:absolute before:bottom-0 before:left-4 before:top-2 before:w-px before:bg-gradient-to-b before:from-cyanGlow/60 before:to-transparent sm:before:left-1/2">
@@ -563,9 +756,9 @@ function Projects() {
       <div className="section-shell">
         <div className="flex flex-col gap-4">
           <p className="text-sm font-medium uppercase tracking-[0.28em] text-cyan-200">Projects</p>
-          <h2 className="section-heading">Selected work that proves product thinking and execution quality.</h2>
+          <h2 className="section-heading">Projects positioned like solutions, not just portfolio entries.</h2>
           <p className="section-copy">
-            The goal is not just code shipped. It is business workflows improved, user experiences polished, and systems built to handle real usage.
+            Clients care about what problem was solved, how the solution was built, and why the product now feels stronger. That is how this work is framed.
           </p>
         </div>
 
@@ -592,12 +785,17 @@ function Projects() {
                   <h3 className="font-display text-2xl font-semibold text-white">{project.title}</h3>
                 </div>
                 <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
-                  Product Build
+                  Client Solution
                 </div>
               </div>
 
-              <p className="mt-5 text-sm leading-7 text-slate-300">{project.summary}</p>
-              <p className="mt-4 text-sm leading-7 text-slate-200">{project.impact}</p>
+              <p className="mt-5 text-sm leading-7 text-slate-200">{project.summary}</p>
+
+              <div className="mt-6 space-y-4 rounded-[24px] border border-white/10 bg-black/20 p-5">
+                <ProjectPoint label="Problem" value={project.problem} />
+                <ProjectPoint label="Solution" value={project.solution} />
+                <ProjectPoint label="Outcome" value={project.outcome} />
+              </div>
 
               <div className="mt-6 flex flex-wrap gap-2">
                 {project.tags.map((tag) => (
@@ -610,6 +808,70 @@ function Projects() {
                 ))}
               </div>
             </motion.article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Process() {
+  return (
+    <section className="py-16 sm:py-24">
+      <div className="section-shell">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-medium uppercase tracking-[0.28em] text-cyan-200">Process</p>
+          <h2 className="section-heading">Simple collaboration, clearer communication, fewer surprises.</h2>
+          <p className="section-copy">
+            A strong freelance experience is not only about code quality. It is also about clarity, progress visibility, and confidence during delivery.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-5 lg:grid-cols-3">
+          {processSteps.map((step, index) => (
+            <motion.div
+              key={step.title}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.5, delay: index * 0.06 }}
+              className="glass-panel rounded-[28px] p-6 shadow-glass"
+            >
+              <p className="font-display text-xl font-semibold text-white">{step.title}</p>
+              <p className="mt-4 text-sm leading-7 text-slate-300">{step.description}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FaqSection() {
+  return (
+    <section id="faq" className="py-16 sm:py-24">
+      <div className="section-shell">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-medium uppercase tracking-[0.28em] text-cyan-200">FAQ</p>
+          <h2 className="section-heading">Questions clients usually ask before reaching out.</h2>
+          <p className="section-copy">
+            This section helps both conversion and SEO by answering the questions that matter before the first message.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-5 lg:grid-cols-2">
+          {faqItems.map((item, index) => (
+            <motion.div
+              key={item.question}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.5, delay: index * 0.05 }}
+              className="glass-panel rounded-[28px] p-6 shadow-glass"
+            >
+              <h3 className="font-display text-xl font-semibold text-white">{item.question}</h3>
+              <p className="mt-4 text-sm leading-7 text-slate-300">{item.answer}</p>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -735,25 +997,25 @@ function Contact() {
                   <p className="text-sm font-medium uppercase tracking-[0.28em] text-cyan-200">Contact</p>
                   <h2 className="section-heading mt-4">Let&apos;s Build Something Great</h2>
                   <p className="mt-5 max-w-xl text-base leading-8 text-slate-300">
-                    Ready to launch a mobile app, full-stack platform, or real-time product? Share the essentials and I&apos;ll review your requirements personally. Serious project inquiries get a reply within 24 hours.
+                    Ready to launch a mobile app, full-stack platform, or real-time product? Share your scope, budget, and timeline here so I can respond with more context and less back-and-forth.
                   </p>
 
                   <div className="mt-8 grid gap-4">
                     <ActionCard
                       title="Email Shortcut"
-                      subtitle="For detailed briefs, partnership discussions, and project scope documents."
+                      subtitle="Best for detailed briefs, business discussions, and longer project requirements."
                       href="mailto:aroraaryan512@gmail.com"
                       label="aroraaryan512@gmail.com"
                     />
                     <ActionCard
                       title="WhatsApp Quick Chat"
-                      subtitle="For faster conversations, quick estimates, and project urgency."
+                      subtitle="Best for faster conversations, urgency checks, and quick project discussions."
                       href="https://wa.me/919928496590?text=Hi%20Aryan%2C%20I%20want%20to%20start%20a%20project."
                       label="+91 9928496590"
                     />
                     <ActionCard
                       title="LinkedIn"
-                      subtitle="View profile credibility, background, and professional presence."
+                      subtitle="See professional profile credibility, experience, and direct networking access."
                       href="https://www.linkedin.com/in/aryan-arora-4615b21ab/"
                       label="Open LinkedIn"
                     />
@@ -765,11 +1027,11 @@ function Contact() {
                   <ul className="mt-4 space-y-3 text-sm leading-7 text-slate-300">
                     <li className="flex gap-3">
                       <span className="mt-2 h-2 w-2 rounded-full bg-cyanGlow" />
-                      <span>Captures scope, budget, timeline, and context in one step.</span>
+                      <span>Captures scope, budget, timeline, and requirements in one step.</span>
                     </li>
                     <li className="flex gap-3">
                       <span className="mt-2 h-2 w-2 rounded-full bg-cyanGlow" />
-                      <span>Makes serious client inquiries easier to qualify and respond to quickly.</span>
+                      <span>Helps qualify serious client inquiries instead of vague “hi” messages.</span>
                     </li>
                     <li className="flex gap-3">
                       <span className="mt-2 h-2 w-2 rounded-full bg-cyanGlow" />
@@ -787,7 +1049,7 @@ function Contact() {
                   <div>
                     <p className="font-display text-2xl font-semibold text-white">Start Your Project</p>
                     <p className="mt-2 text-sm leading-6 text-slate-400">
-                      Share the details and I&apos;ll get back to you within 24 hours.
+                      Serious inquiries get a reply within 24 hours.
                     </p>
                   </div>
                   <div className="hidden rounded-full border border-emeraldGlow/25 bg-emeraldGlow/10 px-3 py-1 text-xs font-medium text-emerald-200 sm:block">
@@ -870,7 +1132,7 @@ function Contact() {
                     }`}
                   />
                   <p className="mt-2 text-xs text-slate-500">
-                    Include features, audience, constraints, and any existing tech if available.
+                    Include features, users, constraints, deadlines, or any existing system details.
                   </p>
                   {errors.description ? (
                     <p className="mt-2 text-sm text-rose-300">{errors.description}</p>
@@ -918,6 +1180,20 @@ function Contact() {
                 {serverError ? (
                   <div className="mt-5 rounded-2xl border border-rose-400/25 bg-rose-400/10 px-4 py-3 text-sm text-rose-200">
                     {serverError}
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <a
+                        href="mailto:aroraaryan512@gmail.com"
+                        className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white"
+                      >
+                        Email Instead
+                      </a>
+                      <a
+                        href="https://wa.me/919928496590?text=Hi%20Aryan%2C%20I%20want%20to%20start%20a%20project."
+                        className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white"
+                      >
+                        WhatsApp Instead
+                      </a>
+                    </div>
                   </div>
                 ) : null}
 
@@ -964,25 +1240,17 @@ function FloatingWhatsApp() {
 function MobileStickyCTA() {
   return (
     <div className="fixed inset-x-0 bottom-4 z-40 px-4 sm:hidden">
-        <div className="glass-panel mx-auto flex max-w-md items-center justify-between gap-3 rounded-full px-4 py-3 shadow-glass">
-          <div>
-            <p className="text-xs text-slate-400">Available for Freelance</p>
-            <p className="text-sm font-semibold text-white">View my work or reach out</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <a
-              href="#projects"
-              className="rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white"
-            >
-              Demo
-            </a>
-            <a
-              href="#contact"
-              className="rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-slate-950"
-            >
-              Contact
-            </a>
-          </div>
+      <div className="glass-panel mx-auto flex max-w-md items-center justify-between gap-3 rounded-full px-4 py-3 shadow-glass">
+        <div>
+          <p className="text-xs text-slate-400">Available for Freelance</p>
+          <p className="text-sm font-semibold text-white">Start your project today</p>
+        </div>
+        <a
+          href="#contact"
+          className="rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-slate-950"
+        >
+          Start Project
+        </a>
       </div>
     </div>
   );
@@ -1006,6 +1274,21 @@ function MetricCard({
   );
 }
 
+function ProjectPoint({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="text-xs font-medium uppercase tracking-[0.24em] text-cyan-200">{label}</p>
+      <p className="mt-2 text-sm leading-7 text-slate-300">{value}</p>
+    </div>
+  );
+}
+
+function TrustChip({ label }: { label: string }) {
+  return (
+    <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2">{label}</div>
+  );
+}
+
 function ContactPill({
   label,
   value,
@@ -1016,7 +1299,12 @@ function ContactPill({
   href: string;
 }) {
   return (
-    <a href={href} className="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10">
+    <a
+      href={href}
+      className="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10"
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noreferrer" : undefined}
+    >
       <p className="text-xs uppercase tracking-[0.24em] text-slate-400">{label}</p>
       <p className="mt-2 text-sm font-medium text-white">{value}</p>
     </a>
@@ -1174,8 +1462,16 @@ function DatabaseIcon() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <ellipse cx="12" cy="6" rx="7" ry="3" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M5 6V12C5 13.6569 8.13401 15 12 15C15.866 15 19 13.6569 19 12V6" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M5 12V18C5 19.6569 8.13401 21 12 21C15.866 21 19 19.6569 19 18V12" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M5 6V12C5 13.6569 8.13401 15 12 15C15.866 15 19 13.6569 19 12V6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M5 12V18C5 19.6569 8.13401 21 12 21C15.866 21 19 19.6569 19 18V12"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
     </svg>
   );
 }
@@ -1220,6 +1516,26 @@ function ChatIcon() {
       />
       <path d="M8 10H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
       <path d="M8 14H13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function CheckShieldIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M12 3L19 6V11C19 16 15.5 19.5 12 21C8.5 19.5 5 16 5 11V6L12 3Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9.5 11.5L11.2 13.2L14.8 9.6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
