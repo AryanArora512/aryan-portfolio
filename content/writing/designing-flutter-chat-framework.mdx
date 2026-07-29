@@ -1,0 +1,45 @@
+---
+title: "Designing a Flutter Chat Framework"
+date: "May 2026"
+category: "Flutter"
+description: "Building an extensible, offline-first chat UI framework in Flutter."
+---
+
+Chat interfaces are deceptively complex. What looks like a simple vertical list of bubbles is actually a highly dynamic view requiring precise scroll physics, lazy loading, unread separators, date dividers, and real-time animation of incoming messages.
+
+When building communication features into multiple products, I found myself rewriting the same chat view logic. To solve this, I designed a reusable Flutter chat framework. Here is how I approached the architecture.
+
+## 1. The Virtualized List Problem
+
+A chat screen might contain 10,000 messages. Rendering all of them is impossible. Flutter's `ListView.builder` handles lazy rendering, but chat lists have a unique requirement: **they grow upwards.**
+
+By default, lists grow downwards. To implement a chat, you use `reverse: true`. However, when a new message arrives and is inserted at index 0, the list physically shifts to accommodate it. If the user was reading history (scrolled up), the new message disrupts their reading position.
+
+**The Solution:**
+I utilized a `CustomScrollView` with a `SliverList` and a sophisticated anchor mechanism. When the scroll offset is near zero (at the bottom), new messages auto-scroll the list. If the user has scrolled up by more than 50 pixels, new messages are silently inserted, and an "Unread Messages" FAB appears, preserving the scroll position via a custom `ScrollPosition` implementation.
+
+## 2. Decoupling Data from Presentation
+
+A common mistake in chat UIs is tightly coupling the UI widget to the database model (e.g., passing a `MessageModel` directly to a `BubbleWidget`). This makes it impossible to insert UI-only elements like Date Dividers or "New Message" separators.
+
+**The Solution:**
+I created an intermediate presentation layer. The `ChatController` maps raw database models into a unified `ChatItem` sealed class:
+
+```dart
+sealed class ChatItem {}
+class MessageItem extends ChatItem { final Message msg; }
+class DateDividerItem extends ChatItem { final DateTime date; }
+class UnreadSeparatorItem extends ChatItem {}
+```
+
+The UI then simply iterates over a flattened list of `ChatItem`s, rendering the correct widget based on the type. This cleanly separates business logic from rendering logic.
+
+## 3. Local-First with Hive
+
+Chat must be available offline. I integrated the framework deeply with **Hive**. The UI listens to a `ValueListenable` provided by a Hive Box. When a message is sent, it is immediately written to the local Hive box with a `status` of `sending`. The UI reacts instantly (optimistic UI). 
+
+In the background, a queue processor attempts to send the message via WebSocket. Upon receipt from the server, the local Hive record is updated to `delivered`. This ensures the UI never blocks on network requests.
+
+## Conclusion
+
+Building a robust chat framework taught me that UI architecture is just as critical as backend architecture. By separating the presentation state from the data models and handling scroll physics at a low level, the framework became flexible enough to drop into any Flutter application.

@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Aryan Arora Portfolio",
     short_name: "Aryan",
     description:
-      "Portfolio of Aryan Arora, Full Stack Mobile App Developer and Flutter specialist.",
+      "Portfolio of Aryan Arora, software engineer focused on product systems, AI-enabled experiences, and full-stack engineering.",
     start_url: "/",
     display: "standalone",
     background_color: "#050816",

@@ -1,0 +1,43 @@
+---
+title: "Hive vs SQLite for Local-First Flutter Apps"
+date: "April 2026"
+status: "Accepted"
+---
+
+# Hive vs SQLite for Local-First Flutter Apps
+
+**Date:** April 2026  
+**Status:** Accepted
+
+## Context
+
+When building cross-platform mobile applications in Flutter that require offline-first capabilities (where the user can read and write data without an internet connection, syncing when online), selecting the local database is the most critical architectural decision.
+
+The two main contenders are:
+1. **SQLite (via sqflite):** The industry standard relational database.
+2. **Hive (or Isar):** A lightweight, blazing-fast NoSQL key-value database written in pure Dart.
+
+## Decision
+
+We chose **Hive** (and are migrating towards Isar for complex queries) for our local-first Flutter applications, completely avoiding SQLite unless complex multi-table relational joins are strictly necessary on the client side.
+
+## Rationale
+
+1. **Performance and Memory:**
+   Hive is a pure Dart key-value store. It loads the entire dataset (or lazy boxes) into memory and persists it to disk. Read operations are synchronous and instantaneous because they hit the Dart memory heap, completely bypassing the asynchronous platform channel overhead required to communicate with native SQLite binaries.
+
+2. **Platform Channel Bottlenecks:**
+   In Flutter, `sqflite` requires serializing data, passing it across the platform channel to the native iOS/Android SQLite implementation, and deserializing the result back into Dart. When querying hundreds of rows to populate a UI list, this asynchronous serialization overhead causes noticeable frame drops. Hive operates entirely within the Dart isolate.
+
+3. **Offline Sync Models:**
+   Local-first apps often use a CRDT (Conflict-free Replicated Data Type) or a timestamp-based event sourcing model for syncing with the cloud. These models often map better to a NoSQL document/key-value structure than to rigid relational schemas.
+
+## Tradeoffs
+
+- **Memory Constraints:** Because standard Hive boxes load all keys and values into memory, it is unsuitable for massive datasets (e.g., gigabytes of data). We mitigate this by using LazyBoxes for large objects or migrating to Isar for indexed querying.
+- **No Complex Queries:** Hive lacks SQL. You cannot `JOIN` or easily `GROUP BY`. Filtering is done in memory using standard Dart iterables.
+- **Migration Complexity:** Changing data schemas requires writing custom TypeAdapters and migration logic, which can be less ergonomic than SQL `ALTER TABLE` statements.
+
+## Conclusion
+
+For 90% of mobile applications, the local database acts as a caching layer or an offline queue rather than a complex relational data warehouse. The synchronous read speeds and zero platform-channel overhead make Hive the superior choice for achieving 60/120fps scrolling performance in Flutter.

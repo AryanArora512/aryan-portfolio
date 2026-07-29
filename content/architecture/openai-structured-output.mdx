@@ -1,0 +1,43 @@
+---
+title: "Function Calling vs Prompt-Based JSON Extraction"
+date: "March 2026"
+status: "Accepted"
+---
+
+# Function Calling vs Prompt-Based JSON Extraction
+
+**Date:** March 2026  
+**Status:** Accepted
+
+## Context
+
+When integrating Large Language Models (LLMs) into production software (like OzRabas for automated itinerary generation), the output must be strictly structured (usually JSON) so it can be parsed and stored in a relational database. 
+
+The two primary methods for forcing LLMs to output structured data are:
+1. **Prompt Engineering:** Asking the model to "Output strictly as JSON" and providing a few-shot example.
+2. **Function Calling (Tools):** Using the provider's native function calling API (e.g., OpenAI's `tools` array) and defining a strict JSON Schema.
+
+## Decision
+
+We chose **Function Calling (Tools API)** combined with Pydantic schema generation as the absolute standard for all structured LLM interactions, deprecating all prompt-based JSON extraction.
+
+## Rationale
+
+1. **Deterministic Parsing:**
+   Prompt-based JSON extraction is brittle. The model will occasionally prepend `Here is your JSON:` or wrap the output in markdown backticks (````json ... ````), requiring regex and string manipulation to clean the payload before parsing. Function calling guarantees the output is passed directly into a JSON arguments string that can be parsed natively.
+
+2. **Schema Enforcement:**
+   With Function Calling, we define the exact JSON Schema the model must adhere to. The model is specifically fine-tuned by the provider to respect these schema constraints.
+
+3. **Pydantic Integration:**
+   In Python (using FastAPI or standard scripts), we can define a Pydantic model and use utilities (like `instructor` or LangChain) to automatically generate the JSON Schema and validate the parsed output. This creates a type-safe boundary between the non-deterministic LLM and our deterministic database schema.
+
+## Tradeoffs
+
+- **Token Overhead:** Passing a complex JSON Schema in the tools array consumes context window tokens and increases API costs slightly per request.
+- **Provider Lock-in:** The function calling API syntax is not completely standardized across all providers (OpenAI, Anthropic, Gemini), though libraries like LiteLLM help abstract this.
+- **Latency:** Function calling can sometimes add slight latency compared to raw text generation.
+
+## Conclusion
+
+The reduction in parsing errors and the ability to maintain strong type safety across the application boundary far outweighs the minimal token overhead. Prompt-based extraction should only be used as a fallback for models that do not natively support function calling.

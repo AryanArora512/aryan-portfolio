@@ -24,11 +24,17 @@ export async function POST(request: Request) {
     const fullName = String(formData.get("fullName") || "").trim();
     const email = String(formData.get("email") || "").trim();
     const phone = String(formData.get("phone") || "").trim();
+    const company = String(formData.get("company") || "").trim();
     const projectType = String(formData.get("projectType") || "").trim();
     const budget = String(formData.get("budget") || "").trim();
     const timeline = String(formData.get("timeline") || "").trim();
     const description = String(formData.get("description") || "").trim();
+    const website = String(formData.get("website") || "").trim();
     const attachment = formData.get("attachment");
+
+    if (website) {
+      return NextResponse.json({ message: "Thanks! I’ll get back to you within 24 hours." });
+    }
 
     if (!fullName || !email || !description) {
       return NextResponse.json(
@@ -92,6 +98,7 @@ export async function POST(request: Request) {
               <tr><td style="padding:8px 0;font-weight:700">Full Name</td><td style="padding:8px 0">${escapeHtml(fullName)}</td></tr>
               <tr><td style="padding:8px 0;font-weight:700">Email</td><td style="padding:8px 0">${escapeHtml(email)}</td></tr>
               <tr><td style="padding:8px 0;font-weight:700">Phone / WhatsApp</td><td style="padding:8px 0">${escapeHtml(phone || "Not provided")}</td></tr>
+              <tr><td style="padding:8px 0;font-weight:700">Company</td><td style="padding:8px 0">${escapeHtml(company || "Not provided")}</td></tr>
               <tr><td style="padding:8px 0;font-weight:700">Project Type</td><td style="padding:8px 0">${escapeHtml(projectType || "Not provided")}</td></tr>
               <tr><td style="padding:8px 0;font-weight:700">Budget</td><td style="padding:8px 0">${escapeHtml(budget || "Not provided")}</td></tr>
               <tr><td style="padding:8px 0;font-weight:700">Timeline</td><td style="padding:8px 0">${escapeHtml(timeline || "Not provided")}</td></tr>
@@ -107,6 +114,7 @@ export async function POST(request: Request) {
         `Full Name: ${fullName}`,
         `Email: ${email}`,
         `Phone / WhatsApp: ${phone || "Not provided"}`,
+        `Company: ${company || "Not provided"}`,
         `Project Type: ${projectType || "Not provided"}`,
         `Budget: ${budget || "Not provided"}`,
         `Timeline: ${timeline || "Not provided"}`,

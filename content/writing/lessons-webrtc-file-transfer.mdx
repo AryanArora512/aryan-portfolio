@@ -1,0 +1,43 @@
+---
+title: "Lessons from Building a WebRTC File Transfer System"
+date: "July 2026"
+category: "Architecture"
+description: "Why P2P file transfer is incredibly difficult in the real world, and what I learned building Rapidus Share."
+---
+
+When I started building Rapidus Share, the premise was simple: why do we upload files to a central server just to download them to a device sitting 10 feet away? A direct peer-to-peer connection over WebRTC seemed like the obvious solution. 
+
+The reality of building a production P2P system is far messier. 
+
+Here are the three biggest lessons I learned while building a system designed to move gigabytes of data between browsers.
+
+## 1. Symmetric NATs are the Enemy of P2P
+
+WebRTC relies on ICE (Interactive Connectivity Establishment) to find the shortest path between two peers. In a perfect world, ICE uses STUN to discover the public IP of both peers and connects them directly.
+
+However, many mobile networks and corporate firewalls use **Symmetric NAT**. A Symmetric NAT maps a different external port for every new destination. When Peer A asks the STUN server for its IP/Port, the NAT assigns Port 5000. But when Peer A actually tries to connect to Peer B, the NAT assigns Port 5001. Peer B receives traffic from an unknown port and drops it.
+
+**The Fix:** You *must* have a TURN server (Traversal Using Relays around NAT). A TURN server acts as a relay in the cloud. If direct connection fails, both peers connect to the TURN server. This guarantees a connection, but defeats the "zero server bandwidth" cost model. I learned to heavily prioritize finding cheap egress bandwidth (like Cloudflare R2) as a fallback rather than relying purely on TURN.
+
+## 2. Browser Memory Limits Will Crash Your App
+
+My initial implementation for receiving a file was simple:
+1. Receive a chunk over the WebRTC DataChannel.
+2. Push the chunk into a JavaScript Array.
+3. Once all chunks are received, create a `Blob` and trigger a download.
+
+This worked perfectly for a 10MB PDF. When I tested a 1.2GB video file, the browser tab silently crashed. Browsers strictly limit the memory allocated to a single JavaScript execution context.
+
+**The Fix:** The Origin Private File System (OPFS). OPFS provides a high-performance, synchronous file system API for web apps. Instead of keeping chunks in memory, I streamed them directly into an OPFS file handle. When the transfer finished, the user saved the file from the local disk. This eliminated memory crashes entirely.
+
+## 3. WebSockets are Still King for Signaling
+
+To establish a WebRTC connection, peers need to exchange SDP (Session Description Protocol) offers and answers. This requires a signaling server.
+
+I initially tried to build the signaling server using serverless functions (like AWS Lambda) and database polling. The latency was terrible, and ICE negotiation failed constantly because candidates arrived out of order.
+
+**The Fix:** I switched to a stateful Node.js server using Socket.IO. The persistent WebSocket connection ensured sub-50ms delivery of ICE candidates. The lesson here is that while stateless architectures scale easily, stateful WebSockets are irreplaceable for low-latency coordination.
+
+## Conclusion
+
+Building P2P systems in the browser forces you to confront the messy reality of network topology and browser sandboxing. The resulting system is complex, but the unit economics of zero-bandwidth transfer make it an architecture worth mastering.

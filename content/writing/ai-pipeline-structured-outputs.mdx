@@ -1,0 +1,57 @@
+---
+title: "Building an AI Pipeline with Structured Outputs"
+date: "April 2026"
+category: "AI"
+description: "How to enforce type safety across the non-deterministic LLM boundary."
+---
+
+When integrating Large Language Models (LLMs) into traditional software, the biggest friction point is crossing the boundary between non-deterministic natural language and deterministic code.
+
+An LLM generating a paragraph of text is easy. An LLM extracting 15 distinct entities from a document and returning them so a backend can insert them into a SQL database is incredibly hard. 
+
+Here is how I build production AI pipelines that guarantee structured outputs.
+
+## The Problem with Prompting for JSON
+
+Initially, most engineers solve structured extraction via prompting:
+*"Extract the names and dates. Output only as valid JSON. Do not include markdown."*
+
+This fails in production. Why?
+1. The model might still wrap the output in ````json ```` backticks.
+2. The model might add a conversational prefix: "Here is the JSON you requested:"
+3. The model might invent keys or change the schema types (returning a string instead of an array).
+
+You end up writing brittle RegEx and error-handling code to sanitize the LLM output before passing it to `JSON.parse()`.
+
+## The Solution: Native Function Calling
+
+The industry standard solution is **Function Calling** (or Tools). Instead of asking the model to generate JSON in the message body, you provide the model with a strict JSON Schema defining a "function" it can call.
+
+The model is fine-tuned to recognize when it should call a tool and guarantees (to a very high degree) that the arguments it passes will match your provided JSON Schema.
+
+## Automating Schema Generation with Pydantic
+
+Writing JSON Schema by hand is tedious. In Python, the best approach is to use **Pydantic** combined with a library like `instructor`.
+
+You define your desired output as a Pydantic model:
+
+```python
+from pydantic import BaseModel, Field
+
+class UserExtraction(BaseModel):
+    name: str = Field(description="The full name of the user.")
+    age: int = Field(description="The age of the user in years.")
+    skills: list[str] = Field(description="A list of technical skills mentioned.")
+```
+
+When you pass this model to the OpenAI API via `instructor`, it automatically converts the Pydantic class into a JSON Schema, forces the model to use that schema via the Tools API, and then automatically parses the raw string response back into the strongly-typed Pydantic object.
+
+## Handling Validation Failures
+
+Even with Function Calling, models hallucinate. Pydantic is your safety net. If the LLM returns an array of objects instead of an array of strings for `skills`, Pydantic throws a `ValidationError`.
+
+In a robust pipeline, you catch this `ValidationError`, format it as a system message (e.g., *"Your previous response failed validation: 'skills' must be a list of strings"*), and pass it back to the LLM in an automatic retry loop. 
+
+## Conclusion
+
+By treating the LLM as an unreliable function that requires strict schema enforcement and automatic retries on type errors, you can build AI features that behave with the reliability of traditional software components.

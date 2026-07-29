@@ -1,0 +1,52 @@
+---
+title: "Authentication Patterns I Reuse"
+date: "February 2026"
+category: "Backend"
+description: "How I handle stateless JWTs, refresh tokens, and route protection across all my full-stack projects."
+---
+
+Authentication is something you build once and then hopefully copy-paste for the rest of your career. Over multiple projects, I have distilled my authentication strategy down to a single, robust pattern using JWTs, HTTP-only cookies, and middleware-level protection.
+
+Here is the exact pattern I reuse.
+
+## 1. The Token Strategy
+
+I strictly use **Stateless JWTs** for the access token and **Stateful Refresh Tokens**.
+
+- **Access Token:** A short-lived (15 minutes) JWT containing the `user_id` and basic roles. It is completely stateless. The backend verifies the cryptographic signature (using a symmetric HS256 secret) without touching the database.
+- **Refresh Token:** A long-lived (7 days) opaque string (or a signed token) stored in the database.
+
+**Why this split?** Stateless access tokens mean API requests are fast (no DB lookup). But if a user is banned, a purely stateless token remains valid until it expires. The short 15-minute expiration minimizes this window. The stateful refresh token allows me to instantly revoke access by deleting the record in the database.
+
+## 2. Token Storage (The Browser Problem)
+
+Storing JWTs in `localStorage` is vulnerable to Cross-Site Scripting (XSS) attacks. Any malicious JavaScript running on your domain can read `localStorage`.
+
+Instead, I **exclusively use `HttpOnly`, `Secure`, `SameSite=Strict` cookies** for both the access and refresh tokens.
+
+When the user logs in, the backend sets two cookies. The browser automatically attaches them to every subsequent API request to the same domain. The frontend JavaScript never actually touches or sees the token.
+
+## 3. The Refresh Flow
+
+When the access token expires (after 15 minutes), the backend returns a `401 Unauthorized`. 
+
+I configure my frontend HTTP client (usually Axios or a custom `fetch` wrapper) with an interceptor:
+1. Detect the `401`.
+2. Pause all outgoing requests in a queue.
+3. Make a background request to the `/api/auth/refresh` endpoint. (Because the refresh token is also in an `HttpOnly` cookie, the browser handles sending it automatically).
+4. The backend verifies the refresh token, sets a new access token cookie, and responds with `200 OK`.
+5. The interceptor replays the paused requests.
+
+This creates an invisible, seamless session for the user that remains highly secure.
+
+## 4. Route Protection Middleware
+
+Security should not rely on developers remembering to call `checkAuth()` in every controller. 
+
+I use framework-level Middleware (Next.js Middleware or FastAPI Dependencies). The middleware intercepts all traffic to `/api/protected/*`. It reads the cookie, verifies the JWT signature, and injects the `user_id` into the request context. 
+
+If the token is missing or invalid, the middleware blocks the request and returns a `401` before the code ever reaches the business logic controller.
+
+## Conclusion
+
+This pattern—short-lived stateless JWTs, long-lived stateful refresh tokens, HttpOnly cookies, interceptor-based invisible refreshes, and middleware protection—provides the optimal balance between performance, security, and developer experience.

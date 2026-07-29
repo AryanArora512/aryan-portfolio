@@ -60,7 +60,7 @@ export default function OpenGraphImage() {
               </div>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <div style={{ fontSize: 22, color: "#a5f3fc" }}>Aryan Arora</div>
-                <div style={{ fontSize: 18, color: "#cbd5e1" }}>Full Stack Mobile App Developer</div>
+                <div style={{ fontSize: 18, color: "#cbd5e1" }}>Production Software Engineer</div>
               </div>
             </div>
             <div
@@ -73,7 +73,7 @@ export default function OpenGraphImage() {
                 background: "rgba(52,211,153,0.12)",
               }}
             >
-              Available for Freelance
+              Building Robust Systems
             </div>
           </div>
 
@@ -87,11 +87,11 @@ export default function OpenGraphImage() {
                 fontWeight: 700,
               }}
             >
-              <span>Scalable Mobile Apps</span>
-              <span>Real-Time Systems</span>
+              <span>Production Software Engineer</span>
+              <span>& Cross-Platform Architect</span>
             </div>
             <div style={{ fontSize: 28, lineHeight: 1.4, color: "#cbd5e1" }}>
-              Flutter specialist building premium mobile apps, dashboards, APIs, and full-stack products for startups and businesses.
+              Building scalable AI platforms, real-time engines, and cross-platform mobile applications.
             </div>
           </div>
 

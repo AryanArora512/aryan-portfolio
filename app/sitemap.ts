@@ -4,7 +4,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: "https://aryan-arora-dev.vercel.app",
-      lastModified: new Date("2026-04-08"),
+      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1,
     },

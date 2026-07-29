@@ -1,0 +1,43 @@
+---
+title: "WebRTC DataChannel vs WebSockets for Large File Transfers"
+date: "June 2026"
+status: "Accepted"
+---
+
+# WebRTC DataChannel vs WebSockets for Large File Transfers
+
+**Date:** June 2026  
+**Status:** Accepted
+
+## Context
+
+For Rapidus Share, the core product requirement is allowing users to send files up to 10GB directly to each other via a link. 
+
+The two primary transport mechanisms in the browser are:
+1. **WebSockets:** Full-duplex TCP connections routed through a central server.
+2. **WebRTC DataChannels:** Peer-to-peer UDP connections (often wrapping SCTP) negotiated between clients.
+
+## Decision
+
+We chose **WebRTC DataChannels** as the primary transfer mechanism, with a fallback to cloud storage (Cloudflare R2), completely bypassing WebSockets for the actual file data payload. WebSockets (via Socket.IO) are strictly reserved for the signaling phase.
+
+## Rationale
+
+1. **Bandwidth Costs:**
+   Routing gigabytes of data through a WebSocket server requires the server to ingress and egress every single byte. For a free file-sharing service, bandwidth costs would scale linearly with usage, destroying unit economics. WebRTC establishes a direct connection between clients, meaning data transfer costs $0 in server bandwidth.
+
+2. **Network Efficiency:**
+   WebSockets run over TCP. Packet loss causes head-of-line blocking, which drastically reduces throughput on suboptimal networks. WebRTC DataChannels run over SCTP/UDP, which can be configured for unreliable or unordered delivery if necessary, though we use reliable mode for files. It avoids the severe TCP congestion control penalties over long-distance, high-latency links.
+
+3. **Privacy by Design:**
+   With WebRTC, the file data never touches our servers. The transfer is inherently end-to-end encrypted (DTLS), providing a strong privacy guarantee to users.
+
+## Tradeoffs
+
+- **NAT Traversal Complexity:** WebRTC requires a STUN/TURN infrastructure to negotiate connections across symmetric NATs. We have to maintain signaling servers and TURN servers, increasing operational complexity.
+- **Connection Reliability:** In corporate environments with strict firewalls, WebRTC UDP traffic is often blocked. This necessitated building a complete fallback mechanism (uploading to Cloudflare R2 and downloading) when the P2P connection fails.
+- **Browser Memory Limits:** Handling large byte streams in JS via WebRTC required implementing the Origin Private File System (OPFS) API to stream data directly to disk, avoiding browser Out-Of-Memory (OOM) crashes.
+
+## Conclusion
+
+The operational complexity of WebRTC is the cost of doing business in the P2P space. The economic and performance benefits of avoiding central server routing make WebRTC the only viable option for a highly scalable, free file transfer product.

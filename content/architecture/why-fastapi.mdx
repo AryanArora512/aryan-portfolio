@@ -1,0 +1,44 @@
+---
+title: "Why FastAPI over Django for AI Backends"
+date: "July 2026"
+status: "Accepted"
+---
+
+# Why FastAPI over Django for AI Backends
+
+**Date:** July 2026  
+**Status:** Accepted
+
+## Context
+
+When architecting the backend for AI-heavy platforms (like OzRabas and various internal tools), we need to integrate deeply with ML models, Python data science libraries (like Pandas and NumPy), and LLM APIs (like OpenAI). 
+
+The two primary candidates for Python web frameworks are **Django** (batteries-included, deeply mature) and **FastAPI** (modern, async-first, typing-heavy). 
+
+## Decision
+
+We chose **FastAPI** as the standard backend framework for all new AI and microservices-oriented projects. Django will be reserved only for heavy, monolithic CMS-driven applications where the built-in admin panel and ORM provide overriding value.
+
+## Rationale
+
+1. **Async by Default:**
+   AI workflows are heavily I/O bound. Calling an LLM API can take anywhere from 1 to 30 seconds. In a synchronous framework like Django (though async support is improving, the ecosystem is still largely synchronous), long-running API calls block worker threads. FastAPI's native `async/await` allows a single Uvicorn worker to handle thousands of concurrent connections while waiting for OpenAI or a local GPU inference server to respond.
+
+2. **First-Class Pydantic Integration:**
+   AI applications require strict data validation, especially when dealing with unstructured data or parsing JSON outputs from LLMs. FastAPI is built entirely around Pydantic. If an LLM returns malformed JSON, Pydantic catches it at the boundary layer before it touches the business logic.
+
+3. **Performance:**
+   FastAPI, built on Starlette, benchmarks significantly faster than Django and Flask. While Python itself is the bottleneck for compute, FastAPI ensures the web layer adds minimal latency.
+
+4. **Microservices Architecture:**
+   AI tools are often built as microservices (e.g., a dedicated OCR service, a dedicated vector search service). FastAPI is lightweight. We don't need a heavy ORM or templating engine for a service that just receives text and returns a vector embedding.
+
+## Tradeoffs
+
+- **No Built-in Admin Panel:** We lose Django's free admin panel, meaning we have to build our own or use tools like Retool for internal administration.
+- **ORM Fragmentation:** Instead of Django's unified ORM, we have to stitch together SQLAlchemy (or SQLModel) and Alembic, which requires more boilerplate.
+- **Smaller Ecosystem for Traditional Web Auth:** We have to implement our own OAuth flows or rely on external providers (like Auth0 or Supabase) rather than using `django-allauth`.
+
+## Conclusion
+
+The async capabilities and Pydantic validation are non-negotiable for modern AI development. The tradeoffs regarding the admin panel and ORM are acceptable given our use of decoupled frontends (Next.js/React) and modern Auth providers.
