@@ -35,30 +35,34 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-        scrolled ? "bg-slateNight/80 backdrop-blur-md border-b border-white/5" : "bg-transparent"
+        "fixed inset-x-0 top-0 z-50 transition-all duration-300 bg-transparent"
       )}
     >
-      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+      <div className="container max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 relative z-50">
+        <div className={cn(
+          "flex items-center justify-between h-14 lg:h-16 px-6 rounded-full transition-all duration-500",
+          scrolled 
+            ? "bg-[#0b1021]/90 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)]" 
+            : "bg-[#0f152e]/50 backdrop-blur-md border border-white/5"
+        )}>
           {/* Logo */}
           <Link
             href="/"
-            className="text-white font-display text-lg font-semibold tracking-tight hover:text-cyanGlow transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyanGlow rounded-md"
+            className="text-white font-display text-xl font-bold tracking-tight hover:text-cyan-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-md"
           >
-            Aryan Arora.
+            A.
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-2">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyanGlow",
+                  "px-4 py-2 rounded-full text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400",
                   pathname === link.href || (link.href !== "/" && pathname?.startsWith(link.href))
-                    ? "bg-white/10 text-white"
+                    ? "text-cyan-300 bg-white/5"
                     : "text-slate-300 hover:text-white hover:bg-white/5"
                 )}
               >
@@ -69,19 +73,18 @@ export function Navbar() {
 
           {/* Actions */}
           <div className="hidden md:flex items-center gap-4">
-            <a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-medium text-slate-300 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyanGlow rounded-md px-2 py-1"
+            <Link
+              href="/about"
+              className="text-sm font-medium text-slate-300 hover:text-cyan-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-md"
             >
               Resume
-            </a>
+            </Link>
+            <div className="w-px h-4 bg-white/20"></div>
             <Link
               href="/#contact"
-              className="inline-flex h-9 items-center justify-center rounded-full bg-white px-4 text-sm font-medium text-slate-950 transition-colors hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyanGlow"
+              className="inline-flex h-9 items-center justify-center rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 px-5 text-sm font-semibold text-white shadow-lg shadow-cyan-500/20 transition-all hover:shadow-cyan-500/40 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
             >
-              Get in touch
+              Contact
             </Link>
           </div>
 
@@ -98,8 +101,8 @@ export function Navbar() {
 
       {/* Mobile Nav Overlay */}
       {isOpen && (
-        <div className="md:hidden fixed inset-0 top-[64px] z-40 bg-slateNight/95 backdrop-blur-xl border-t border-white/5 h-[calc(100vh-64px)] overflow-y-auto">
-          <nav className="flex flex-col p-4 gap-2">
+        <div className="md:hidden fixed inset-0 z-40 bg-[#030510]/95 backdrop-blur-2xl overflow-y-auto pt-24 pb-8">
+          <nav className="flex flex-col px-6 gap-2">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -115,14 +118,12 @@ export function Navbar() {
               </Link>
             ))}
             <div className="h-px bg-white/10 my-4" />
-            <a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/about"
               className="px-4 py-4 rounded-xl text-lg font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
             >
               Resume
-            </a>
+            </Link>
             <Link
               href="/#contact"
               className="mt-4 inline-flex h-12 items-center justify-center rounded-xl bg-white px-4 text-base font-medium text-slate-950 transition-colors hover:bg-slate-200"

@@ -4,6 +4,10 @@ import { hrms } from "./hrms";
 import { sparkLove } from "./spark-love";
 import { sulaimania } from "./sulaimania";
 import { aiMobileApp } from "./ai-mobile-app";
+import { expenseManagement } from "./expense-management";
+import { loginComponent } from "./login-component";
+import { uncleLau } from "./unclelau";
+import { realTimeChat } from "./real-time-chat";
 import { Project } from "@/types/project";
 
 export const allProjects: Project[] = [
@@ -13,6 +17,10 @@ export const allProjects: Project[] = [
   sparkLove,
   sulaimania,
   aiMobileApp,
+  expenseManagement,
+  loginComponent,
+  uncleLau,
+  realTimeChat,
 ];
 
 export function getProjectBySlug(slug: string): Project | undefined {

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import Link from "next/link";
 
 const CORE_STACK = [
   "Python", "FastAPI", "React", "Next.js",
@@ -40,26 +41,28 @@ export function Hero() {
           {/* H1 — primary headline */}
           <motion.h1
             {...fadeUp(0.05)}
-            className="font-display mt-7 text-5xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl"
+            className="font-display mt-7 text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-7xl"
           >
-            I build AI platforms, realtime systems, and <span className="text-slate-400">cross-platform mobile apps.</span>
+            Crafting Premium <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400">Mobile Experiences</span> & Robust Architectures.
           </motion.h1>
 
           {/* Tech stack — ATS keywords, visible text */}
           <motion.p
             {...fadeUp(0.1)}
-            className="mt-6 font-mono text-sm text-slate-400 sm:text-base"
+            className="mt-6 font-mono text-sm text-slate-400 sm:text-base flex flex-wrap gap-2 items-center"
             aria-label="Core technologies"
           >
-            {CORE_STACK.join(" · ")}
+            {CORE_STACK.map(tech => (
+              <span key={tech} className="tech-badge bg-white/5 hover:bg-white/10 hover:border-white/20 transition-all cursor-default">{tech}</span>
+            ))}
           </motion.p>
 
           {/* Body copy */}
           <motion.p
             {...fadeUp(0.14)}
-            className="mt-5 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg"
+            className="mt-6 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg"
           >
-            Building production-grade AI platforms, enterprise backends, realtime systems, and high-performance cross-platform mobile applications.
+            I am a Software Engineer specializing in Flutter and full-stack development. I focus on bridging the gap between pixel-perfect UI, seamless cross-platform performance, and highly scalable enterprise backends.
           </motion.p>
 
           {/* CTAs */}
@@ -68,46 +71,49 @@ export function Hero() {
             className="mt-9 flex flex-wrap items-center gap-3"
           >
             {/* Primary — resume download */}
-            <a
-              href="/resume.pdf"
-              download
-              aria-label="Download Aryan Arora's resume as PDF"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-slate-950 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100"
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M12 3v13M7 12l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M4 20h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-              Download Resume
-            </a>
+            <Link href="/about" aria-label="View Aryan Arora's resume" passHref legacyBehavior>
+              <motion.a
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-cyan-500/20 transition-all hover:shadow-cyan-500/40 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-[#030510]"
+              >
+                View Resume
+              </motion.a>
+            </Link>
 
             {/* Secondary — view projects */}
-            <a
+            <motion.a
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               href="#work"
-              className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-6 py-3.5 text-sm font-semibold text-white transition duration-200 hover:border-white/20 hover:bg-white/[0.08]"
+              className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-6 py-3.5 text-sm font-semibold text-white transition duration-200 hover:border-white/30 hover:bg-white/[0.1]"
             >
               View Projects
-            </a>
+            </motion.a>
 
             {/* Tertiary — icon links */}
-            <a
+            <motion.a
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              whileTap={{ scale: 0.9 }}
               href="https://github.com/AryanArora512"
               target="_blank"
               rel="noreferrer"
               aria-label="GitHub profile"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 transition duration-200 hover:border-white/16 hover:text-white"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 transition duration-200 hover:border-white/30 hover:text-white hover:bg-white/10"
             >
               <GitHubIcon />
-            </a>
-            <a
+            </motion.a>
+            <motion.a
+              whileHover={{ scale: 1.1, rotate: -5 }}
+              whileTap={{ scale: 0.9 }}
               href="https://linkedin.com/in/aryan-arora512"
               target="_blank"
               rel="noreferrer"
               aria-label="LinkedIn profile"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 transition duration-200 hover:border-white/16 hover:text-white"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 transition duration-200 hover:border-white/30 hover:text-white hover:bg-white/10"
             >
               <LinkedInIcon />
-            </a>
+            </motion.a>
           </motion.div>
         </div>
       </div>

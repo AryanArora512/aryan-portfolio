@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { navItems } from "../content";
+import Link from "next/link";
 
 export function Navbar() {
   const reduced = useReducedMotion();
@@ -50,18 +51,12 @@ export function Navbar() {
         </nav>
 
         {/* Resume CTA — always visible */}
-        <a
-          href="/resume.pdf"
-          download
-          aria-label="Download Aryan Arora's resume as PDF"
-          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm font-semibold text-white transition duration-200 hover:border-white/16 hover:bg-white/[0.07]"
+        <Link
+          href="/about"
+          className="rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyanGlow"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 3v13M7 12l5 5 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M4 20h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-          </svg>
           Resume
-        </a>
+        </Link>
       </div>
     </motion.header>
   );

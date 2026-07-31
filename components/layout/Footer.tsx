@@ -1,69 +1,97 @@
+"use client";
+
 import * as React from "react";
 import Link from "next/link";
-import { Mail } from "lucide-react";
+import { Mail, ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-white/5 bg-slateNight pt-16 pb-8">
-      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-8">
+    <footer className="relative bg-[#030510] overflow-hidden pt-32 pb-8 border-t border-white/5">
+      {/* Decorative gradient for CTA */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-64 bg-[radial-gradient(ellipse_at_top,rgba(34,211,238,0.1),transparent_70%)]" aria-hidden="true" />
+      
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        {/* Massive CTA Section */}
+        <div className="flex flex-col items-center justify-center text-center mb-32">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight"
+          >
+            Let's build something <br className="hidden md:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400">extraordinary.</span>
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-lg text-slate-400 max-w-2xl mb-10"
+          >
+            Have a project in mind or just want to say hi? I'm always open to discussing new opportunities, architecture challenges, or mobile app ideas.
+          </motion.p>
+          <motion.a 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            href="mailto:aroraaryan512@gmail.com"
+            className="inline-flex items-center gap-2 rounded-full bg-white text-slate-950 px-8 py-4 text-base font-bold shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(255,255,255,0.5)] transition-all"
+          >
+            Say Hello <ArrowUpRight size={20} />
+          </motion.a>
+        </div>
+
+        {/* Links Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-8 pt-16 border-t border-white/5">
           {/* Brand & Version */}
           <div className="md:col-span-1">
-            <Link href="/" className="text-white font-display text-xl font-semibold tracking-tight">
-              Aryan Arora.
+            <Link href="/" className="text-white font-display text-xl font-bold tracking-tight">
+              A.
             </Link>
-            <p className="mt-4 text-sm text-slate-400">
-              Building AI platforms, realtime systems, enterprise software, and cross-platform mobile applications.
+            <p className="mt-4 text-sm text-slate-400 leading-relaxed">
+              Crafting premium mobile experiences, realtime systems, and robust enterprise software architectures.
             </p>
-            <div className="mt-6 inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/5 px-3 py-1 text-xs font-mono text-slate-300">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
-              v2.0 — Updated July 2026
-            </div>
           </div>
 
           {/* Navigation */}
           <div className="md:col-span-1">
-            <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-4">Engineering</h3>
-            <ul className="space-y-3">
-              <li><Link href="/projects" className="text-sm text-slate-400 hover:text-cyanGlow transition-colors">Flagship Projects</Link></li>
-              <li><Link href="/systems" className="text-sm text-slate-400 hover:text-cyanGlow transition-colors">Reusable Systems</Link></li>
-              <li><Link href="/architecture" className="text-sm text-slate-400 hover:text-cyanGlow transition-colors">Architecture Decisions</Link></li>
-              <li><Link href="/now" className="text-sm text-slate-400 hover:text-cyanGlow transition-colors">Tech Radar</Link></li>
+            <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-5">Engineering</h3>
+            <ul className="space-y-4">
+              <li><Link href="/projects" className="text-sm text-slate-400 hover:text-cyan-300 transition-colors">Projects</Link></li>
+              <li><Link href="/systems" className="text-sm text-slate-400 hover:text-cyan-300 transition-colors">Systems</Link></li>
+              <li><Link href="/architecture" className="text-sm text-slate-400 hover:text-cyan-300 transition-colors">Architecture</Link></li>
             </ul>
           </div>
 
           {/* Writing & About */}
           <div className="md:col-span-1">
-            <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-4">Content</h3>
-            <ul className="space-y-3">
-              <li><Link href="/writing" className="text-sm text-slate-400 hover:text-cyanGlow transition-colors">Technical Writing</Link></li>
-              <li><Link href="/engineering/principles" className="text-sm text-slate-400 hover:text-cyanGlow transition-colors">Engineering Principles</Link></li>
-              <li><Link href="/about" className="text-sm text-slate-400 hover:text-cyanGlow transition-colors">About & Experience</Link></li>
-              <li><a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-sm text-slate-400 hover:text-cyanGlow transition-colors">Resume (PDF)</a></li>
+            <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-5">Content</h3>
+            <ul className="space-y-4">
+              <li><Link href="/about" className="text-sm text-slate-400 hover:text-cyan-300 transition-colors">About Me</Link></li>
+              <li><Link href="/about" className="text-sm text-slate-400 hover:text-cyan-300 transition-colors">Resume</Link></li>
+              <li><Link href="/writing" className="text-sm text-slate-400 hover:text-cyan-300 transition-colors">Articles</Link></li>
             </ul>
           </div>
 
           {/* Contact & Socials */}
           <div className="md:col-span-1">
-            <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-4">Connect</h3>
-            <ul className="space-y-3">
-              <li>
-                <a href="mailto:aroraaryan512@gmail.com" className="group flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors">
-                  <Mail size={16} className="text-slate-500 group-hover:text-cyanGlow transition-colors" />
-                  Email
-                </a>
-              </li>
+            <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-5">Connect</h3>
+            <ul className="space-y-4">
               <li>
                 <a href="https://github.com/AryanArora512" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-500 group-hover:text-cyanGlow transition-colors"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
                   GitHub
                 </a>
               </li>
               <li>
                 <a href="https://linkedin.com/in/aryan-arora512" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-500 group-hover:text-cyanGlow transition-colors"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                   LinkedIn
                 </a>
               </li>
@@ -71,11 +99,12 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-slate-500">
-            &copy; {currentYear} Aryan Arora. Designed and built by me.
+          <p className="text-xs text-slate-500 font-mono">
+            &copy; {currentYear} Aryan Arora.
           </p>
-          <div className="flex items-center gap-4 text-xs text-slate-500">
+          <div className="flex items-center gap-4 text-xs text-slate-500 font-mono">
             <span>Built with Next.js & Tailwind</span>
           </div>
         </div>

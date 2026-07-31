@@ -120,6 +120,28 @@ export const experiences: Experience[] = [
   },
 ];
 
+export type Education = {
+  id: string;
+  degree: string;
+  institution: string;
+  period: string;
+};
+
+export const education: Education[] = [
+  {
+    id: "mca",
+    degree: "Master's of Computer Application (MCA)",
+    institution: "University Of Rajasthan Management and Technical Campus, Kota",
+    period: "Aug 2023 – Aug 2025",
+  },
+  {
+    id: "bca",
+    degree: "Bachelor of Computer Application (BCA)",
+    institution: "University of Rajasthan, Jaipur",
+    period: "Jul 2020 – Aug 2023",
+  },
+];
+
 // ─── Architecture Diagrams ────────────────────────────────────────────────────
 
 export type ArchNode = {
