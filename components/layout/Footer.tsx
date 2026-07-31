@@ -23,7 +23,7 @@ export function Footer() {
             viewport={{ once: true }}
             className="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight"
           >
-            Let's build something <br className="hidden md:block" />
+            Let&apos;s build something <br className="hidden md:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400">extraordinary.</span>
           </motion.h2>
           <motion.p 
@@ -33,7 +33,7 @@ export function Footer() {
             transition={{ delay: 0.1 }}
             className="text-lg text-slate-400 max-w-2xl mb-10"
           >
-            Have a project in mind or just want to say hi? I'm always open to discussing new opportunities, architecture challenges, or mobile app ideas.
+            Have a project in mind or just want to say hi? I&apos;m always open to discussing new opportunities, architecture challenges, or mobile app ideas.
           </motion.p>
           <motion.a 
             initial={{ opacity: 0, y: 20 }}

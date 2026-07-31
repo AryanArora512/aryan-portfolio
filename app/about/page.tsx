@@ -59,7 +59,7 @@ export default function AboutPage() {
             I am a Software Engineer specializing in building scalable products from end-to-end. While my core expertise lies in crafting pixel-perfect, high-performance mobile applications with Flutter, I routinely architect the entire stack—from Next.js web dashboards down to robust FastAPI backends and PostgreSQL databases.
           </p>
           <p className="text-slate-300 leading-relaxed text-lg relative z-10">
-            My engineering philosophy centers around correctness, maintainability, and operational clarity. I don't just build features; I focus on the intricate details that make an app feel premium, ensuring that whether it's an AI-orchestration pipeline or a realtime WebRTC system, the architecture can handle real-world scale gracefully.
+            My engineering philosophy centers around correctness, maintainability, and operational clarity. I don&apos;t just build features; I focus on the intricate details that make an app feel premium, ensuring that whether it&apos;s an AI-orchestration pipeline or a realtime WebRTC system, the architecture can handle real-world scale gracefully.
           </p>
         </motion.div>
 
