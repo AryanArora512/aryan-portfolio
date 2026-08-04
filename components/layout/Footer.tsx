@@ -76,7 +76,7 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-5">Content</h3>
             <ul className="space-y-4">
               <li><Link href="/about" className="text-sm text-slate-400 hover:text-cyan-300 transition-colors">About Me</Link></li>
-              <li><Link href="/about" className="text-sm text-slate-400 hover:text-cyan-300 transition-colors">Resume</Link></li>
+              <li><a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-sm text-slate-400 hover:text-cyan-300 transition-colors">Resume</a></li>
               <li><Link href="/writing" className="text-sm text-slate-400 hover:text-cyan-300 transition-colors">Articles</Link></li>
             </ul>
           </div>

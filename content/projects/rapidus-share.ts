@@ -31,11 +31,16 @@ export const rapidusShare: Project = {
       decision: "OPFS (Origin Private File System) for chunk buffering",
       rationale: "Writing incoming DataChannel chunks to memory causes browser OOM crashes on files above ~200MB. OPFS writes directly to disk, allowing reliable transfer of 500MB+ files without memory pressure.",
       tradeoffs: ["Requires newer browser APIs and strict secure contexts (HTTPS)."],
+    },
+    {
+      decision: "Continuous P2P sharing & incremental updates",
+      rationale: "Refactored local selection logic allows appending new files to an active P2P session without re-initialization. Backend persistence and signaling via the `/sessions/{code}/files` API allow peers to discover newly added files in real-time.",
+      tradeoffs: ["Increases state complexity on the client to handle dynamic file lists during active transfers."],
     }
   ],
-  performance: "Achieves near gigabit local transfer speeds over LAN via direct P2P. Cloud fallback sustains 50-80Mbps depending on client network.",
-  security: "Optional session passwords stored as bcrypt hashes. Presigned R2 URLs expire after 15 minutes. Session codes verified server-side.",
-  scalability: "Socket.IO signaling is currently stateful. Horizontal scaling requires Redis Pub/Sub integration.",
+  performance: "Achieves near gigabit local transfer speeds over LAN via direct P2P. Cloud fallback sustains 50-80Mbps depending on client network. Standardized P2P handshake ensures graceful handling of transient connection drops.",
+  security: "Optional session passwords stored as bcrypt hashes. Presigned R2 URLs expire after 15 minutes. Session codes verified server-side for cloud downloads. Automated background tasks prune expired sessions and orphaned R2 files.",
+  scalability: "Socket.IO signaling is currently stateful. Horizontal scaling requires Redis Pub/Sub integration. Integrated analytics and diagnostic reporting for session performance monitoring.",
   screenshots: {
     hero: "/images/projects/rapidus-share/hero.png",
   },

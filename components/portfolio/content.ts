@@ -318,6 +318,10 @@ export const flagshipProjects: Project[] = [
         rationale:
           "Writing incoming DataChannel chunks to memory causes browser OOM crashes on files above ~200MB. OPFS writes directly to disk, allowing reliable transfer of 500MB+ files without memory pressure.",
       },
+      {
+        decision: "Continuous P2P sharing & incremental updates",
+        rationale: "Refactored local selection logic allows appending new files to an active P2P session without re-initialization. Backend persistence and signaling via the `/sessions/{code}/files` API allow peers to discover newly added files in real-time.",
+      }
     ],
     biggestChallenge:
       "ICE timeout detection. The browser's ICE state machine transitions to `disconnected` before `failed`. Triggering fallback on `disconnected` produced false positives on momentary network hiccups. Triggering only on `failed` added 30 seconds of lag per failed session. Solution: a custom 8-second timer that starts on `disconnected` and initiates R2 fallback if the connection does not recover to `connected`.",
@@ -327,7 +331,7 @@ export const flagshipProjects: Project[] = [
       "Socket.IO signaling server is stateful (in-memory room state). Does not scale horizontally without Redis Pub/Sub — documented as a known architectural gap.",
     ],
     security:
-      "Optional session passwords stored as bcrypt hashes in PostgreSQL. Presigned R2 URLs expire after 15 minutes with no direct credential exposure. Session codes verified server-side before issuing any presigned URL.",
+      "Optional session passwords stored as bcrypt hashes in PostgreSQL. Presigned R2 URLs expire after 15 minutes with no direct credential exposure. Session codes verified server-side before issuing any presigned URL. Automated background tasks prune expired sessions and orphaned R2 files.",
     lessonsLearned: [
       "ICE state machine behaviour differs between Chrome, Safari, and Firefox in ways the WebRTC spec does not fully document. Browser-specific ICE timeout testing required real devices on mobile networks — emulators were insufficient.",
       "Would add Redis Pub/Sub for signaling from day one if rebuilding. Horizontal scaling of stateful WebSocket servers without a message broker is a structural gap that becomes expensive to fix post-launch.",
